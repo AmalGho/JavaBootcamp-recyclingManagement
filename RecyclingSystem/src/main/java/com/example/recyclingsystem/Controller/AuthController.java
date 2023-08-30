@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity logOut(){
-        return ResponseEntity.status(200).body(new ApiResponse("You log out successfully"));
+    public ResponseEntity logout(){
+        return ResponseEntity.status(200).body(new ApiResponse("logout successfully"));
     }
 }

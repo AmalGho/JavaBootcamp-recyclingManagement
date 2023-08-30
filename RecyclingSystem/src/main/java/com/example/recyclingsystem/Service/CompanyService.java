@@ -27,7 +27,6 @@ public class CompanyService {
 
     public void addProfile(Integer company_id, CompanyDTO companyDTO) {
         User user = authRepository.findUserById(company_id);
-        if (user == null) throw new ApiException("wrong username or password");
 
         Company company = new Company(null, companyDTO.getEmail(), user, null);
         companyRepository.save(company);
@@ -35,18 +34,14 @@ public class CompanyService {
 
     public void updateEmail(Integer id, Company company) {
         Company oldCompany = companyRepository.findCompanyById(id);
-        if (oldCompany == null) {
-            throw new ApiException("something went wrong!");
-        }
+
         oldCompany.setEmail(company.getEmail());
         companyRepository.save(oldCompany);
     }
 
     public void deleteAccount(Integer user_id) {
         User user = authRepository.findUserById(user_id);
-        if (user == null) {
-            throw new ApiException("something went wrong!");
-        }
+
         authRepository.delete(user);
         companyRepository.delete(user.getCompany());
     }

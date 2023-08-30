@@ -28,7 +28,6 @@ public class ResidentService {
 
     public void addProfile(Integer resident_id, ResidentDTO residentDTO) {
         User user = authRepository.findUserById(resident_id);
-        if (user == null) throw new ApiException("wrong username or password");
 
         Resident resident = new Resident(null, residentDTO.getEmail(), 0, 0.0, user, null);
         residentRepository.save(resident);
@@ -37,25 +36,22 @@ public class ResidentService {
 
     public void updateEmail(Integer resident_id, ResidentDTO residentDTO) {
         Resident oldResident = residentRepository.findResidentById(resident_id);
-        if (oldResident == null) {
-            throw new ApiException("something went wrong!");
-        }
+
         oldResident.setEmail(residentDTO.getEmail());
         residentRepository.save(oldResident);
     }
 
     public void deleteAccount(Integer user_id) {
         User user = authRepository.findUserById(user_id);
-        if (user == null) {
-            throw new ApiException("something went wrong!");
-        }
+
         authRepository.delete(user);
         residentRepository.delete(user.getResident());
+
     }
 
     public void addMoneyToWallet(Integer user_id) {
         User user = authRepository.findUserById(user_id);
-        if (user == null) throw new ApiException("resident not exist");
+
         if (user.getResident().getPoints() == 20) {
             user.getResident().setWallet(user.getResident().getWallet() + 100);
             user.getResident().setPoints(0);
@@ -65,16 +61,12 @@ public class ResidentService {
 
     public void getPrize(Integer user_id) {
         User user = authRepository.findUserById(user_id);
-        if (user == null) throw new ApiException("resident not exist");
-
 
         if (user.getResident().getRequests().size() >= 10) {
             user.getResident().setWallet(user.getResident().getWallet() + 50);
         } else if (user.getResident().getRequests().size() == 5) {
             user.getResident().setPoints(user.getResident().getPoints() + 5);
-        }
-
-        throw new ApiException("sorry, there is no prize for you yet :(");
+        }else throw new ApiException("sorry, there is no prize for you yet :(");
     }
 
 
